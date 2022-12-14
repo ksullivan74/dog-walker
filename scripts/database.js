@@ -101,7 +101,8 @@ const database = {
 }
 
 export const getWalkers = () => {
-    return database.walkers.map(walker => ({...walker}))
+    //array.map(function(currentValue, index, arr), thisValue)
+   return database.walkers.map(walker => ({...walker}))
 }
 
 export const getPets = () => {

@@ -11,8 +11,16 @@
 8.)As soon as a match is found, display a message that the dog barks at you - "Rocket barks at you"
 */
 
+/*
+In this chapter, you will write code that will iterate two arrays of data to find the information you need. 
+When you click on a pet name, you want to display the name of the pet, and the name of the person who walks the pet.
+Since those two bits of information are in different arrays, you will need to find the pet object, 
+and then find the related walker object based on the foreign key.
+*/
 
-import { getPets } from "./database.js"
+
+import { getPets, getWalkers } from "./database.js"
+
 
 document.addEventListener(
     "click",  // This is the type of event
@@ -26,7 +34,7 @@ document.addEventListener(
         /*
             Only run the rest of the logic if a walker <li> was clicked
         */
-        if (itemClicked.id.startsWith("pet")) {
+        if (itemClicked.id.startsWith("canBeAnything")) {
 
             /*
                 Extract the primary key from the id attribute of the list
@@ -50,28 +58,37 @@ document.addEventListener(
                 Now that you have the primary key of a walker object,
                 find the whole object by iterating the walkers array.
             */
+            let matchingPet = null
             for (const pet of pets) {
-
                 /*
                     Compare the primary key of each walker to the one
                     you have. As soon as you find the right one, display
                     the window alert message.
                 */
                 if (pet.id === parseInt(petId)) {
-                    window.alert(`${pet.name} barks at you`)
+                    matchingPet = pet
+                    //window.alert(`${pet.name} barks at you`)
                 }
             }
+            let matchingWalker = null
+            for (const walker of walkers){
+                if (matchingPet.walkerId === walker.id) {
+                    matchingWalker = walker
+                }
+            }
+            window.alert(`${matchingPet.name} is being walked by ${matchingWalker.name}`)
         }
     }
-)
 
+)
 const pets = getPets()
+const walkers = getWalkers()
 
 export const RegisteredPets = () => {
     let petHTML = "<ul>"
 
     for (const pet of pets) {
-        petHTML += `<li id="pet--${pet.id}> ${pet.name}</li>`
+        petHTML += `<li id="canBeAnything--${pet.id}"> ${pet.name}</li>`
     }
 
     petHTML += "</ul>"
