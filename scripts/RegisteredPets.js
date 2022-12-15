@@ -76,7 +76,7 @@ document.addEventListener(
                     matchingWalker = walker
                 }
             }
-            window.alert(`${matchingPet.name} is being walked by ${matchingWalker.name}`)
+        window.alert(`${matchingPet.name} is being walked by ${matchingWalker.name}`)
         }
     }
 

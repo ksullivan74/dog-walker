@@ -1,4 +1,7 @@
+import { Assignments } from "./Assignments.js"
 import { getWalkers } from "./database.js"
+import { getWalkerCities } from "./database.js"
+import { getCities } from "./database.js"
 
 document.addEventListener(
     "click",  // This is the type of event
@@ -30,21 +33,19 @@ document.addEventListener(
                 Destructuring in JavaScript:
                     https://www.youtube.com/watch?v=UgEaJBz3bjY
             */
-            const [,walkerId] = itemClicked.id.split("--")
+            const [, walkerId] = itemClicked.id.split("--")
 
             /*
                 Now that you have the primary key of a walker object,
                 find the whole object by iterating the walkers array.
             */
+            
             for (const walker of walkers) {
-
-                /*
-                    Compare the primary key of each walker to the one
-                    you have. As soon as you find the right one, display
-                    the window alert message.
-                */
                 if (walker.id === parseInt(walkerId)) {
-                    window.alert(`${walker.name} services ${walker.city}`)
+                    const Assignments = filterWalkerCitiesByWalker(walkerCityAssignments)
+                    const cities = assignedCityNames(citiesList,Assignments)
+            
+                    window.alert(`${walker.name} services ${cities}`)
                 }
             }
         }
@@ -52,6 +53,8 @@ document.addEventListener(
 )
 
 const walkers = getWalkers()
+const walkerCityAssignments = getWalkerCities()
+const citiesList = getCities()
 
 
 export const Walkers = () => {
@@ -65,3 +68,39 @@ export const Walkers = () => {
 
 }
 
+// The function need the walker information, so define a parameter
+const filterWalkerCitiesByWalker = (walkerCityAssignmentsParam) => {
+    // Define an empty array to store all of the assignment objects
+    const assignments = []
+
+    // Iterate the array value of walkerCities
+    for (const assignment of walkerCityAssignmentsParam) {
+
+        // Check if the primary key of the walker equals the foreign key on the assignment
+        if (assignment.walkerId === walkers.id) {
+            // If it does, add the current object to the array of assignments
+            assignments.push(assignment)
+        }
+    }
+
+    // After the loop is done, return the assignments array
+    return assignments
+}
+
+// Define a function that builds a string of city names. Needs a paramter for assignments array.
+const assignedCityNames = (citiesListParam,assignmentsParam) => {
+    // Define an empty string that will get appended with matching cities
+    let cityNames = ""
+    // Iterate the array of assignment objects
+    for (const assignment of assignmentsParam) {
+        // For each assignment, iterate the cities array to find the match
+        for (const city of citiesListParam) {
+            if (city.id === assignment.cityId) {
+                // Add the name of the matching city to the string of city names
+                cityNames = `${city.name} and ${city.name}`
+            }
+        }
+    }
+    // After the loop is done, return the string
+    return cityNames
+}
